@@ -19,15 +19,51 @@ class FoodsViewModel() {
         getFoods()
     }
 
+    companion object {
+        var idFilterRestaurant: Int = 0
+    }
 
-    private fun getFoods() {
+
+    fun getFoods() {
+
+        var result: List<Food> = repository.getAll()
+
         val fo = Food(id = 1, name = "Papa con queso",
-            description = "Lava, pela y pon a hervir las patatas. Una vez estén cocidas tritúralas hasta formar un puré. A continuación forma bolas de patatas con queso en el centro. Puedes utilizar queso rallado o troceado, te recomiendo utilizar un queso de sabor ligeramente salado", restaurant = 1, qualification = 1.5f,
-            image = "https://scontent-lim1-1.xx.fbcdn.net/v/t1.6435-9/119229450_2369367750038836_3946458816573015074_n.jpg?stp=dst-jpg_p526x296&_nc_cat=103&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=jJKsk_jGGawAX__nPj6&_nc_ht=scontent-lim1-1.xx&oh=00_AT-r5dcgkGFeakMZbz1QKbIHvQiSsoIeewwMggBFoOq9ag&oe=62B477D2")
-        val f = mutableListOf(fo)
+            description = "Lava, pela y pon a hervir las patatas. Una vez estén cocidas tritúralas hasta formar un puré. A continuación forma bolas de patatas con queso en el centro. Puedes utilizar queso rallado o troceado, te recomiendo utilizar un queso de sabor ligeramente salado", restaurant = 1,
+            qualification = "1.5",
+            image = "https://scontent-lim1-1.xx.fbcdn.net/v/t1.6435-9/119229450_2369367750038836_3946458816573015074_n.jpg?stp=dst-jpg_p526x296&_nc_cat=103&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=jJKsk_jGGawAX__nPj6&_nc_ht=scontent-lim1-1.xx&oh=00_AT-r5dcgkGFeakMZbz1QKbIHvQiSsoIeewwMggBFoOq9ag&oe=62B477D2",
+            restaurantName = "Zig Zag")
+        val fo2 = Food(id = 2, name = "Papa con Huevo",
+            description = "Lava, pela y pon a hervir las patatas. Una vez estén cocidas tritúralas hasta formar un puré. A continuación forma bolas de patatas con queso en el centro. Puedes utilizar queso rallado o troceado, te recomiendo utilizar un queso de sabor ligeramente salado", restaurant = 1,
+            qualification = "1.5",
+            image = "https://scontent-lim1-1.xx.fbcdn.net/v/t1.6435-9/119229450_2369367750038836_3946458816573015074_n.jpg?stp=dst-jpg_p526x296&_nc_cat=103&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=jJKsk_jGGawAX__nPj6&_nc_ht=scontent-lim1-1.xx&oh=00_AT-r5dcgkGFeakMZbz1QKbIHvQiSsoIeewwMggBFoOq9ag&oe=62B477D2",
+            restaurantName = "OTRO REST")
+
+        val f = mutableListOf(fo, fo2)
         val foods = f
-        _state.value = state.value.copy(
+        /*_state.value = state.value.copy(
             foods = foods
+        )*/
+        _state.value = state.value.copy(
+            foods = result
+        )
+    }
+    fun getFoodsByRestaurantId(idR: String) {
+
+        var result: List<Food> = repository.getAllByRestaurantId(idR)
+
+        /*val fo = Food(id = 1, name = "Papa con queso",
+            description = "Lava, pela y pon a hervir las patatas. Una vez estén cocidas tritúralas hasta formar un puré. A continuación forma bolas de patatas con queso en el centro. Puedes utilizar queso rallado o troceado, te recomiendo utilizar un queso de sabor ligeramente salado", restaurant = 1,
+            qualification = "1.5",
+            image = "https://scontent-lim1-1.xx.fbcdn.net/v/t1.6435-9/119229450_2369367750038836_3946458816573015074_n.jpg?stp=dst-jpg_p526x296&_nc_cat=103&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=jJKsk_jGGawAX__nPj6&_nc_ht=scontent-lim1-1.xx&oh=00_AT-r5dcgkGFeakMZbz1QKbIHvQiSsoIeewwMggBFoOq9ag&oe=62B477D2",
+            restaurantName = "Zig Zag")
+        val f = mutableListOf(fo)
+        val foods = f*/
+        /*_state.value = state.value.copy(
+            foods = foods
+        )*/
+        _state.value = state.value.copy(
+            foods = result
         )
     }
 }

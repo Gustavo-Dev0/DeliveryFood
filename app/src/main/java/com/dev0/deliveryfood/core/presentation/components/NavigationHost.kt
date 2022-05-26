@@ -1,6 +1,7 @@
 package com.dev0.deliveryfood.core.presentation.components
 
 import FoodDetailScreen
+import HistoryScreen
 import PantallaPrueba
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -19,10 +20,19 @@ fun NavigationHost(
 ) {
     NavHost(navController = navController, startDestination = Destinations.Restaurants.route) {
         composable( Destinations.Restaurants.route ) {
-            RestaurantScreen()
+            RestaurantScreen(
+                navController,
+                navToFoods = { restaurantId ->
+                    navController.navigate(Destinations.Foods.createRoute(restaurantId))
+                }
+            )
         }
-        composable( Destinations.Foods.route ) {
-            FoodScreen(navController)
+        composable( Destinations.Foods.route,
+            arguments = listOf(navArgument("restaurantId") { defaultValue = "0" })
+            ) { backStackEntry ->
+            var res = backStackEntry.arguments?.getString("restaurantId")
+            requireNotNull(res)
+            FoodScreen(navController, res)
         }
         composable(
             Destinations.FoodDetail.route,
@@ -31,11 +41,11 @@ fun NavigationHost(
         })) {
             FoodDetailScreen( navController, it.arguments?.getInt("foodId") )
         }
-        composable( Destinations.Pantalla1.route ) {
-            PantallaPrueba( title = "111" )
+        composable( Destinations.History.route ) {
+            HistoryScreen( title = "Historial de pedidos" )
         }
         composable( Destinations.Cart.route ) {
-            CartScreen( title = "Aqui se paga" )
+            CartScreen( navController, title = "Aqui se paga" )
         }
     }
 }

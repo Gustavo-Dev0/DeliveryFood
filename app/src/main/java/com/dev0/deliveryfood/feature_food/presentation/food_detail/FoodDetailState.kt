@@ -4,6 +4,6 @@ import com.dev0.deliveryfood.feature_food.domain.model.Food
 
 
 data class FoodDetailState(
-    val food: Food? = null,
-    val restaurant: String? = null
+    val food: Food = Food(),
+    val restaurant: String = ""
 )

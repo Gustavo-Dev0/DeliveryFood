@@ -11,9 +11,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 "   id INTEGER PRIMARY KEY," +
                 "   name TEXT," +
                 "   description TEXT," +
-                "   price DOUBLE," +
+                "   price REAL," +
                 "   image TEXT," +
                 "   restaurant INTEGER," +
+                "   restaurantName TEXT," +
                 "   qualification TEXT" +
                 ");")
         db.execSQL("CREATE TABLE restaurant(" +
@@ -21,15 +22,15 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 "   name TEXT," +
                 "   description TEXT," +
                 "   district TEXT," +
-                "   restaurant INTEGER," +
-                "   image TEXT" +
+                "   image TEXT," +
+                "   qualification TEXT" +
                 ");")
         db.execSQL("CREATE TABLE orders(" +
                 "   id INTEGER PRIMARY KEY," +
-                "   detail TEXT," +
                 "   date TEXT," +
                 "   user TEXT," +
-                "   status INTEGER" +
+                "   status INTEGER," +
+                "   total REAL" +
                 ");")
         db.execSQL("CREATE TABLE orders_detail(" +
                 "   id INTEGER PRIMARY KEY," +
@@ -37,7 +38,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 "   restaurant INTEGER," +
                 "   food INTEGER," +
                 "   quantity INTEGER," +
-                "   total DOUBLE" +
+                "   total REAL" +
                 ");")
     }
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
