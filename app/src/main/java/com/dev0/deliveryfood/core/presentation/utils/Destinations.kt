@@ -10,8 +10,8 @@ sealed class Destinations(
     val icon: ImageVector
 ) {
     object Restaurants: Destinations("restaurants", "Restaurantes", Icons.Filled.Restaurant)
-    object Foods: Destinations("foods?restaurantId={restaurantId}", "Comidas", Icons.Filled.FoodBank){
-        fun createRoute(restaurantId: String) = "foods?restaurantId=$restaurantId"
+    object Foods: Destinations("foods/{restaurantId}", "Comidas", Icons.Filled.FoodBank){
+        fun createRoute(restaurantId: String) = "foods/$restaurantId"
     }
     object FoodDetail: Destinations("foodDetail/{foodId}", "Detalles de comida", Icons.Filled.Settings){
         fun createRoute(foodId: Int) = "foodDetail/$foodId"

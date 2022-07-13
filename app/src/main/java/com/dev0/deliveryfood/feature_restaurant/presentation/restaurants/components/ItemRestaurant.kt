@@ -21,6 +21,6 @@ fun ItemRestaurant(
             .fillMaxWidth(),
         elevation = 8.dp,
     ) {
-        CardContent(item, onClick)
+        RestaurantCardContent(item, onClick)
     }
 }

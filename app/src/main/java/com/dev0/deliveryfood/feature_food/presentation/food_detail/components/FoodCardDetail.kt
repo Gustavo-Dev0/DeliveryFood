@@ -26,12 +26,9 @@ fun FoodCardDetail(
     foodDetail: FoodDetailState,
     onclick: (Int) -> Unit
 ){
-
     var cant by remember { mutableStateOf(0) }
 
-    Card(
-
-    ) {
+    Card {
         // Contenedor
         Column {
             Row(
@@ -57,7 +54,7 @@ fun FoodCardDetail(
                 Spacer(modifier = Modifier.width(32.dp))
 
                 Column(Modifier.fillMaxWidth()) {
-                    Text(text = foodDetail.food.name, style = MaterialTheme.typography.h6)
+                    Text(text = ""+foodDetail.food?.name, style = MaterialTheme.typography.h6)
                 }
             }
             Row(
@@ -65,12 +62,12 @@ fun FoodCardDetail(
                     .fillMaxWidth()
                     .padding(start = 16.dp)
             ) {
-                Text(text = "Restaurant: "+foodDetail.restaurant, style = MaterialTheme.typography.body1)
+                Text(text = "Restaurante: "+foodDetail.food?.restaurantName, style = MaterialTheme.typography.body1)
             }
 
 
             Image(
-                painter = rememberImagePainter(data = foodDetail.food.image),
+                painter = rememberImagePainter(data = foodDetail.food?.image),
                 contentDescription = "",
                 Modifier
                     .background(color = Color.LightGray)
@@ -81,7 +78,7 @@ fun FoodCardDetail(
             Row(Modifier.padding(start = 16.dp, end = 24.dp, top = 16.dp)) {
 
                 Text(
-                    text = foodDetail.food.description,
+                    text = ""+foodDetail.food?.description,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.body2,
@@ -90,7 +87,7 @@ fun FoodCardDetail(
             Row(Modifier.padding(start = 16.dp, end = 24.dp, top = 16.dp)) {
 
                 Text(
-                    text = "S/. "+foodDetail.food.price,
+                    text = "S/. "+foodDetail.food?.price,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.h2,
@@ -149,8 +146,10 @@ fun FoodCardDetail(
                     onClick = {
                         if(cant > 0){
                             onclick(cant)
+                            cant = 0
                         }
-                    }
+                    },
+                    enabled = cant > 0
                 ) {
                     Text(text = "Agregar al carrito")
                 }

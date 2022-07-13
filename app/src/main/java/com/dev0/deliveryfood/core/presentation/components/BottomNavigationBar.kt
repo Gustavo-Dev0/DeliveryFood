@@ -1,5 +1,6 @@
 package com.dev0.deliveryfood.core.presentation.components
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -38,12 +39,19 @@ fun BottomNavigationBar(
                         label = { Text(text = screen.title) },
                         selected = currentRoute == screen.route,
                         onClick = {
-                            navController.navigate(screen.route){
+                            var routeD = screen.route
+                            if(screen.route == "foods/{restaurantId}"){
+                                routeD = Destinations.Foods.createRoute("0")
+                            }
+
+                            navController.navigate(routeD) {
+
                                 popUpTo(navController.graph.findStartDestination().id){
                                     saveState = true
                                 }
-
+                                restoreState = true
                                 launchSingleTop = true
+
                             }
                         },
                         alwaysShowLabel = false

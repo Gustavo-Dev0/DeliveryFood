@@ -1,16 +1,16 @@
 package com.dev0.deliveryfood.core.presentation.components
 
 import FoodDetailScreen
-import HistoryScreen
-import PantallaPrueba
+import com.dev0.deliveryfood.feacture_order.presentation.history.HistoryScreen
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.dev0.deliveryfood.core.presentation.utils.Destinations
-import com.dev0.deliveryfood.feacture_cart.presentation.cart.CartScreen
+import com.dev0.deliveryfood.feacture_order.presentation.cart.CartScreen
 import com.dev0.deliveryfood.feature_food.presentation.foods.FoodScreen
 import com.dev0.deliveryfood.feature_restaurant.presentation.restaurants.RestaurantScreen
 
@@ -18,19 +18,25 @@ import com.dev0.deliveryfood.feature_restaurant.presentation.restaurants.Restaur
 fun NavigationHost(
     navController: NavHostController
 ) {
-    NavHost(navController = navController, startDestination = Destinations.Restaurants.route) {
+    NavHost(navController = navController, startDestination = Destinations.Restaurants.route, ) {
         composable( Destinations.Restaurants.route ) {
             RestaurantScreen(
                 navController,
                 navToFoods = { restaurantId ->
-                    navController.navigate(Destinations.Foods.createRoute(restaurantId))
+                    navController.navigate(Destinations.Foods.createRoute(restaurantId)){
+                        popUpTo("restaurants"){
+                            saveState = true
+                        }
+                        //restoreState = true
+                        launchSingleTop = true
+                    }
                 }
             )
         }
         composable( Destinations.Foods.route,
             arguments = listOf(navArgument("restaurantId") { defaultValue = "0" })
             ) { backStackEntry ->
-            var res = backStackEntry.arguments?.getString("restaurantId")
+            val res = backStackEntry.arguments?.getString("restaurantId")
             requireNotNull(res)
             FoodScreen(navController, res)
         }

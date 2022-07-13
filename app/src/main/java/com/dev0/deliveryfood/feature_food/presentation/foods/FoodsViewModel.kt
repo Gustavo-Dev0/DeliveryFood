@@ -3,67 +3,70 @@ package com.dev0.deliveryfood.feature_food.presentation.foods
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.dev0.deliveryfood.feature_food.domain.model.Food
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.dev0.deliveryfood.feature_food.domain.repository.FoodRepository
-import com.dev0.deliveryfood.feature_food.presentation.foods.FoodsState
+import com.dev0.deliveryfood.feature_food.domain.model.Food
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-class FoodsViewModel() {
+@HiltViewModel
+class FoodsViewModel @Inject constructor(
+    private val repository: FoodRepository
+): ViewModel(){
 
-    private val repository =  FoodRepository()
+    private var getFoodsJob: Job? = null
+
     private val _state = mutableStateOf(FoodsState())
     val state: State<FoodsState> = _state
 
-    init {
-        getFoods()
-    }
-
     companion object {
-        var idFilterRestaurant: Int = 0
+        var idFilterRestaurant: String = ""
     }
 
 
-    fun getFoods() {
+    val items: Flow<PagingData<Food>> = Pager(
+            PagingConfig(pageSize = 4, initialLoadSize = 4)
+        ){
+            repository.getFoodsPagingSource()
+        }.flow.cachedIn(viewModelScope)
 
-        var result: List<Food> = repository.getAll()
-
-        val fo = Food(id = 1, name = "Papa con queso",
-            description = "Lava, pela y pon a hervir las patatas. Una vez estén cocidas tritúralas hasta formar un puré. A continuación forma bolas de patatas con queso en el centro. Puedes utilizar queso rallado o troceado, te recomiendo utilizar un queso de sabor ligeramente salado", restaurant = 1,
-            qualification = "1.5",
-            image = "https://scontent-lim1-1.xx.fbcdn.net/v/t1.6435-9/119229450_2369367750038836_3946458816573015074_n.jpg?stp=dst-jpg_p526x296&_nc_cat=103&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=jJKsk_jGGawAX__nPj6&_nc_ht=scontent-lim1-1.xx&oh=00_AT-r5dcgkGFeakMZbz1QKbIHvQiSsoIeewwMggBFoOq9ag&oe=62B477D2",
-            restaurantName = "Zig Zag")
-        val fo2 = Food(id = 2, name = "Papa con Huevo",
-            description = "Lava, pela y pon a hervir las patatas. Una vez estén cocidas tritúralas hasta formar un puré. A continuación forma bolas de patatas con queso en el centro. Puedes utilizar queso rallado o troceado, te recomiendo utilizar un queso de sabor ligeramente salado", restaurant = 1,
-            qualification = "1.5",
-            image = "https://scontent-lim1-1.xx.fbcdn.net/v/t1.6435-9/119229450_2369367750038836_3946458816573015074_n.jpg?stp=dst-jpg_p526x296&_nc_cat=103&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=jJKsk_jGGawAX__nPj6&_nc_ht=scontent-lim1-1.xx&oh=00_AT-r5dcgkGFeakMZbz1QKbIHvQiSsoIeewwMggBFoOq9ag&oe=62B477D2",
-            restaurantName = "OTRO REST")
-
-        val f = mutableListOf(fo, fo2)
-        val foods = f
-        /*_state.value = state.value.copy(
-            foods = foods
-        )*/
-        _state.value = state.value.copy(
-            foods = result
-        )
+    private fun getFoods() {
+        getFoodsJob?.cancel()
+        getFoodsJob = repository.getFoods()
+            .onEach { foods ->
+                _state.value = state.value.copy(
+                    foods = foods,
+                )
+            }.launchIn(viewModelScope)
     }
+
     fun getFoodsByRestaurantId(idR: String) {
 
-        var result: List<Food> = repository.getAllByRestaurantId(idR)
-
-        /*val fo = Food(id = 1, name = "Papa con queso",
-            description = "Lava, pela y pon a hervir las patatas. Una vez estén cocidas tritúralas hasta formar un puré. A continuación forma bolas de patatas con queso en el centro. Puedes utilizar queso rallado o troceado, te recomiendo utilizar un queso de sabor ligeramente salado", restaurant = 1,
-            qualification = "1.5",
-            image = "https://scontent-lim1-1.xx.fbcdn.net/v/t1.6435-9/119229450_2369367750038836_3946458816573015074_n.jpg?stp=dst-jpg_p526x296&_nc_cat=103&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=jJKsk_jGGawAX__nPj6&_nc_ht=scontent-lim1-1.xx&oh=00_AT-r5dcgkGFeakMZbz1QKbIHvQiSsoIeewwMggBFoOq9ag&oe=62B477D2",
-            restaurantName = "Zig Zag")
-        val f = mutableListOf(fo)
-        val foods = f*/
-        /*_state.value = state.value.copy(
-            foods = foods
-        )*/
-        _state.value = state.value.copy(
-            foods = result
-        )
+        getFoodsJob?.cancel()
+        getFoodsJob = repository.getFoodsByRestaurantId(idR)
+            .onEach { foods ->
+                _state.value = state.value.copy(
+                    foods = foods,
+                )
+            }.launchIn(viewModelScope)
     }
+    val itemsByRestaurantId: Flow<PagingData<Food>> = Pager(
+    PagingConfig(pageSize = 3, initialLoadSize = 3)
+    ){
+        repository.getFoodsByRestaurantIdPagingSource(idFilterRestaurant)
+    }.flow.cachedIn(viewModelScope)
+
+    fun itemsByRestaurantId(idR: String): Flow<PagingData<Food>> = Pager(
+        PagingConfig(pageSize = 3, initialLoadSize = 3)
+    ){
+        repository.getFoodsByRestaurantIdPagingSource(idR)
+    }.flow.cachedIn(viewModelScope)
 }

@@ -24,6 +24,6 @@ fun ItemFood(
         elevation = 8.dp,
         onClick = onClick
     ) {
-        CardContent(food = item)
+        FoodCardContent(food = item)
     }
 }
