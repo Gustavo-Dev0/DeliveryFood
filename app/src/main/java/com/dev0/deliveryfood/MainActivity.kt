@@ -91,13 +91,13 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch{
             userPreferencesRepository.userPreferencesFlow.collect { userPreferences ->
                 appThemeState.value = userPreferences.appTheme
-                Log.e("COLOR GUARDADO", userPreferences.appTheme)
+
             }
         }
     }
 
     fun updateThemeInDataStore() {
-        Log.e("", "si llega mamon")
+
         lifecycleScope.launch{
             userPreferencesRepository.updateAppTheme(appThemeState.value)
         }

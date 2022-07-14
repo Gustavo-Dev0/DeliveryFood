@@ -45,11 +45,11 @@ class UserPreferencesRepository (private val dataStore: DataStore<Preferences>) 
         }
 
     suspend fun updateAppTheme(appTheme: String) {
-        Log.e("GUARDANDO LLEGó", appTheme)
+
         dataStore.edit { preferences ->
             var a = preferences[PreferencesKeys.APPLICATION_THEME];
             preferences[PreferencesKeys.APPLICATION_THEME] = appTheme
-            Log.e("RESULT", a+" ---> "+preferences[PreferencesKeys.APPLICATION_THEME])
+
         }
     }
 
