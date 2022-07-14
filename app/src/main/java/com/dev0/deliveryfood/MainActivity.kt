@@ -96,25 +96,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun updateThemeInDataStore() {
-
-        lifecycleScope.launch{
-            userPreferencesRepository.updateAppTheme(appThemeState.value)
-        }
-    }
-
-}
-
-inline fun <reified Activity : ComponentActivity> Context.getActivity(): Activity? {
-    return when (this) {
-        is Activity -> this
-        else -> {
-            var context = this
-            while (context is ContextWrapper) {
-                context = context.baseContext
-                if (context is Activity) return context
-            }
-            null
-        }
-    }
 }
