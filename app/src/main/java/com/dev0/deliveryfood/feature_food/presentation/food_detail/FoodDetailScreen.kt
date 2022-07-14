@@ -40,7 +40,7 @@ fun FoodDetailScreen(
     val state = viewModel.state.value
 
     Column(
-        modifier = Modifier
+        modifier = Modifier.background(MaterialTheme.colors.surface)
             .fillMaxSize(),
     ) {
         FoodCardDetail(state){ cant ->

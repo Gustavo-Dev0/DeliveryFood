@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.paging.compose.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.*
@@ -16,15 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.dev0.deliveryfood.core.presentation.utils.Destinations
 import com.dev0.deliveryfood.feature_food.domain.model.Food
 import com.dev0.deliveryfood.feature_food.presentation.foods.components.ItemFood
 import com.dev0.deliveryfood.feature_food.presentation.foods.components.ItemFoodPlaceHolder
-import com.dev0.deliveryfood.feature_restaurant.presentation.restaurants.components.ItemRestaurant
-import com.dev0.deliveryfood.feature_restaurant.presentation.restaurants.components.ItemRestaurantPlaceHolder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
@@ -37,12 +32,12 @@ fun FoodScreen(
 ) {
 
     if (restaurantId == "0") {
-        var foodItems = viewModel.items.collectAsLazyPagingItems()
+        val foodItems = viewModel.items.collectAsLazyPagingItems()
         val state = rememberSwipeRefreshState(
-            isRefreshing = foodItems?.loadState?.refresh is LoadState.Loading
+            isRefreshing = foodItems.loadState.refresh is LoadState.Loading
         )
 
-        Log.e("FOOD SCREEN", "RELOAD" + (foodItems?.loadState?.refresh is LoadState.Loading))
+       // Log.e("FOOD SCREEN", "RELOAD" + (foodItems?.loadState?.refresh is LoadState.Loading))
 
         Column(
             modifier = Modifier
@@ -52,7 +47,7 @@ fun FoodScreen(
             //TEst
             //Text(text = restaurantId)
             //
-            TextField(
+            /*TextField(
                 value = "Buscar comidas",
                 onValueChange = {},
                 modifier = Modifier
@@ -77,11 +72,11 @@ fun FoodScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(20.dp)
-            )
+            )*/
 
             SwipeRefresh(
                 state = state,
-                onRefresh = { foodItems?.refresh() }
+                onRefresh = { foodItems.refresh() }
             ) {
                 LazyVerticalGrid(
                     cells = GridCells.Adaptive(128.dp),
@@ -90,12 +85,12 @@ fun FoodScreen(
                         bottom = 100.dp
                     )
                 ) {
-                    if (foodItems?.loadState?.refresh is LoadState.NotLoading) {
+                    if (foodItems.loadState.refresh is LoadState.NotLoading) {
 
-                        items(foodItems!!.itemCount) { index ->
-                            val actualFood: Food? = foodItems!![index]
+                        items(foodItems.itemCount) { index ->
+                            val actualFood: Food? = foodItems[index]
                             if (actualFood != null) {
-                                ItemFood(foodItems!![index]!!) {
+                                ItemFood(foodItems[index]!!) {
                                     //Log.e("IDFOOD", ""+actualFood.id)
                                     navController.navigate(
                                         Destinations.FoodDetail.createRoute(
@@ -109,7 +104,7 @@ fun FoodScreen(
 
                         }
 
-                        if (foodItems!!.loadState.append is LoadState.Loading) {
+                        if (foodItems.loadState.append is LoadState.Loading) {
                             item {
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     CircularProgressIndicator(
@@ -120,7 +115,7 @@ fun FoodScreen(
                                 }
                             }
                         }
-                    } else if (foodItems?.loadState?.refresh is LoadState.Loading) {
+                    } else if (foodItems.loadState.refresh is LoadState.Loading) {
                         Log.e("", "ESTADO ERCARGANDOP")
                         item {
                             Box(modifier = Modifier.fillParentMaxSize()) {

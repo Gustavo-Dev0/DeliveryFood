@@ -109,7 +109,7 @@ fun CartScreen(
 
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondaryVariant)
+                    //colors = ButtonDefaults.buttonColors()
                 ) {
                     Text(text = "Realizar pedido")
                 }

@@ -39,11 +39,12 @@ fun CartFloatingActionButton(
             Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "")
         }
         if(CartViewModel.currentSizeOfOrders.value > 0) {
+            var color =  MaterialTheme.colors.primary
             Text(
                 modifier = Modifier
                     .drawBehind {
                         drawCircle(
-                            color = Color.Magenta,
+                            color = color,
                             radius = 30F
                         )
                     },

@@ -45,7 +45,7 @@ fun RestaurantScreen(
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        TextField(
+        /*TextField(
             value = "Buscar restaurantes",
             onValueChange = {},
             modifier = Modifier
@@ -65,7 +65,7 @@ fun RestaurantScreen(
             singleLine = true,
             shape = RectangleShape,
             //colors = TextFieldDefaults.textFieldColors()
-        )
+        )*/
 
         Spacer(modifier = Modifier
             .fillMaxWidth()

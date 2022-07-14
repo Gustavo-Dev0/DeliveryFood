@@ -2,6 +2,7 @@ package com.dev0.deliveryfood.core.presentation
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.navigation.compose.rememberNavController
@@ -14,7 +15,8 @@ import currentRoute
 
 @Composable
 fun MainScreen(
-
+    appThemeState: MutableState<String>,
+    updateThemeInDataStore: () -> Unit
 ){
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState(
@@ -70,7 +72,7 @@ fun MainScreen(
 
     Scaffold(
         topBar = {
-            TopConfigBar(topBarState = topBarState)
+            TopConfigBar(topBarState = topBarState, appThemeState = appThemeState, updateDataStore = updateThemeInDataStore)
         },
         scaffoldState = scaffoldState,
         bottomBar = { BottomNavigationBar(navController = navController, items = navigateItems, bottomBarState = bottomBarState) },

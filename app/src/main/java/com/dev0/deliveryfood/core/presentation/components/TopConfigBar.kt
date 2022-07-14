@@ -15,10 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.dev0.deliveryfood.MainActivity
+import com.dev0.deliveryfood.core.data.repository.Theme
+import com.dev0.deliveryfood.getActivity
 
 data class ActionItem(
     val name: String,
@@ -28,7 +32,11 @@ data class ActionItem(
 )
 
 @Composable
-fun TopConfigBar(topBarState: MutableState<Boolean>) {
+fun TopConfigBar(
+    topBarState: MutableState<Boolean>,
+    appThemeState: MutableState<String>,
+    updateDataStore: () -> Unit
+) {
     AnimatedVisibility(
         visible = topBarState.value,
         enter = slideInVertically(initialOffsetY = { -it }),
@@ -38,6 +46,7 @@ fun TopConfigBar(topBarState: MutableState<Boolean>) {
                 title = { Text(text = "DeliveryApp") },
                 actions = {
                     val isExpanded = remember { mutableStateOf(false) }
+                    val mContext = LocalContext.current
 
                     IconButton(
                         onClick = {
@@ -62,7 +71,8 @@ fun TopConfigBar(topBarState: MutableState<Boolean>) {
 
                             DropdownMenuItem(
                                 onClick = {
-                                    //TODO
+                                    appThemeState.value = Theme.DEFAULT
+                                    updateDataStore()
                                     isExpanded.value = false
                                 }
                             ) {
@@ -71,7 +81,8 @@ fun TopConfigBar(topBarState: MutableState<Boolean>) {
 
                             DropdownMenuItem(
                                 onClick = {
-                                    //TODO
+                                    appThemeState.value = Theme.PINK
+                                    updateDataStore()
                                     isExpanded.value = false
                                 }
                             ) {
@@ -80,11 +91,12 @@ fun TopConfigBar(topBarState: MutableState<Boolean>) {
 
                             DropdownMenuItem(
                                 onClick = {
-                                    //TODO
+                                    appThemeState.value = Theme.BLACK
+                                    updateDataStore()
                                     isExpanded.value = false
                                 }
                             ) {
-                                Text(text = "Dark")
+                                Text(text = "Black")
                             }
                         }
                     }

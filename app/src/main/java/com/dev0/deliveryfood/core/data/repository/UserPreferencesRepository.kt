@@ -16,10 +16,10 @@ data class UserPreferences(
 
 sealed class Theme {
     companion object {
-        val PINK: String = "pink"
+        const val PINK: String = "pink"
         val WATER: String = "water"
-        val DEFAULT: String = "default"
-        val BLACK: String = "black"
+        const val DEFAULT: String = "default"
+        const val BLACK: String = "black"
     }
 }
 
@@ -45,8 +45,11 @@ class UserPreferencesRepository (private val dataStore: DataStore<Preferences>) 
         }
 
     suspend fun updateAppTheme(appTheme: String) {
+        Log.e("GUARDANDO LLEGó", appTheme)
         dataStore.edit { preferences ->
+            var a = preferences[PreferencesKeys.APPLICATION_THEME];
             preferences[PreferencesKeys.APPLICATION_THEME] = appTheme
+            Log.e("RESULT", a+" ---> "+preferences[PreferencesKeys.APPLICATION_THEME])
         }
     }
 
